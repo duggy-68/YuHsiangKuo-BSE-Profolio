@@ -58,17 +58,65 @@ Here's where you'll put images of your schematics. [Tinkercad](https://www.tinke
 Here's where you'll put your code. The syntax below places it into a block of code. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize it to your project needs. 
 
 ```c++
+#include <Servo.h>
+
+Servo servo6;
+Servo servo9;
+
+int pos6 = 90;
+int pos9 = 90;
+
+int target6;
+int target9;
+
 void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(9600);
-  Serial.println("Hello World!");
+  servo6.attach(6);
+  servo9.attach(9);
+
+  pinMode(3, OUTPUT);
+  digitalWrite(3, HIGH); // laser ON
+
+  servo6.write(pos6);
+  servo9.write(pos9);
+
+  randomSeed(analogRead(0));
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
 
-}
-```
+  // 🔥 independent random targets
+  target6 = random(10, 170);
+  target9 = random(10, 170);
+
+  int steps6 = abs(target6 - pos6);
+  int steps9 = abs(target9 - pos9);
+
+  int maxSteps = max(steps6, steps9);
+
+  for (int i = 0; i < maxSteps; i++) {
+
+    // --- servo 9 moves faster ---
+    if (i < steps9) {
+      pos9 += (target9 > pos9) ? 1 : -1;
+      servo9.write(pos9);
+    }
+
+    // --- servo 6 moves slower / more random pacing ---
+    if (i % 2 == 0 && i < steps6) {
+      pos6 += (target6 > pos6) ? 1 : -1;
+      servo6.write(pos6);
+    }
+
+    delay(6); // balanced speed (smooth but not slow)
+  }
+
+  // update final positions 
+  pos6 = target6;
+  pos9 = target9;
+
+  // random pause so they never sync up
+  delay(random(80, 400));
+}```
 
 # Bill of Materials
 Here's where you'll list the parts in your project. To add more rows, just copy and paste the example rows below.
@@ -76,8 +124,8 @@ Don't forget to place the link of where to buy each component inside the quotati
 
 | **Part** | **Note** | **Price** | **Link** |
 |:--:|:--:|:--:|:--:|
-| Item Name | What the item is used for | $Price | <a href="https://www.amazon.com/Arduino-A000066-ARDUINO-UNO-R3/dp/B008GRTSV6/"> Link </a> |
-| Item Name | What the item is used for | $Price | <a href="https://www.amazon.com/Arduino-A000066-ARDUINO-UNO-R3/dp/B008GRTSV6/"> Link </a> |
+| Laser Diode | Used for the laser part of the automatic cat laser. | $Price | <a href="https://www.amazon.com/Arduino-A000066-ARDUINO-UNO-R3/dp/B008GRTSV6/"> Link </a> |
+| Servo Motor | Used for the automatic part of the automatic cat laser, it is coded to spin randomly. | $Price | <a href="https://www.amazon.com/Arduino-A000066-ARDUINO-UNO-R3/dp/B008GRTSV6/"> Link </a> |
 | Item Name | What the item is used for | $Price | <a href="https://www.amazon.com/Arduino-A000066-ARDUINO-UNO-R3/dp/B008GRTSV6/"> Link </a> |
 
 # Other Resources/Examples
