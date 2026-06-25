@@ -12,10 +12,6 @@ You should comment out all portions of your portfolio that you have not complete
 **Replace the BlueStamp logo below with an image of yourself and your completed project. Follow the guide [here](https://tomcam.github.io/least-github-pages/adding-images-github-pages-site.html) if you need help.**
 
 ![Headstone Image](logo.svg)
-
-# Starter Milestone
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/_HzAo9UWYic?si=_cvSKKm2nqlFV-xG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
   
 # Final Milestone
 
@@ -55,70 +51,16 @@ For your first milestone, describe what your project is and how you plan to buil
 - Challenges you're facing and solving in your future milestones
 - What your plan is to complete your project
 
+# Starter Milestone
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/_HzAo9UWYic?si=_cvSKKm2nqlFV-xG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 # Schematics 
 ![Schmatics Image](3580501601455523624.jpg)
 
 # Code
 ```c++
-#include <Servo.h>
 
-Servo servo6;
-Servo servo9;
-
-int pos6 = 90;
-int pos9 = 90;
-
-int target6;
-int target9;
-
-void setup() {
-  servo6.attach(6);
-  servo9.attach(9);
-
-  pinMode(3, OUTPUT);
-  digitalWrite(3, HIGH); // laser ON
-
-  servo6.write(pos6);
-  servo9.write(pos9);
-
-  randomSeed(analogRead(0));
-}
-
-void loop() {
-
-  // 🔥 independent random targets
-  target6 = random(10, 170);
-  target9 = random(10, 170);
-
-  int steps6 = abs(target6 - pos6);
-  int steps9 = abs(target9 - pos9);
-
-  int maxSteps = max(steps6, steps9);
-
-  for (int i = 0; i < maxSteps; i++) {
-
-    // --- servo 9 moves faster ---
-    if (i < steps9) {
-      pos9 += (target9 > pos9) ? 1 : -1;
-      servo9.write(pos9);
-    }
-
-    // --- servo 6 moves slower / more random pacing ---
-    if (i % 2 == 0 && i < steps6) {
-      pos6 += (target6 > pos6) ? 1 : -1;
-      servo6.write(pos6);
-    }
-
-    delay(6); // balanced speed (smooth but not slow)
-  }
-
-  // update final positions 
-  pos6 = target6;
-  pos9 = target9;
-
-  // random pause so they never sync up
-  delay(random(80, 400));
-}
 ```
 
 # Bill of Materials
