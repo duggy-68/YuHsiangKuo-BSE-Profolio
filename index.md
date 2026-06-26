@@ -45,17 +45,13 @@ For your second milestone, explain what you've worked on since your previous mil
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/ur3kb19ppF0?si=G0V7BEATicOukPQH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-For your first milestone, describe what your project is and how you plan to build it. You can include:
-- An explanation about the different components of your project and how they will all integrate together
-- Technical progress you've made so far
-- Challenges you're facing and solving in your future milestones
-- What your plan is to complete your project
 For this milestone, I assembled the automatic cat laser system by finishing the placement and wiring of all main components. This included securely mounting the microcontroller, attaching both servo motors, and installing the laser module onto the moving servo platform. After assembling the parts, I wired the components to the microcontroller, power, and ground. One challenge I faced was wiring, because when I first began the project, I had little to no knowledge of how to use a breadboard. As a result, I had to ask the BlueStamp staff for help, and I was able to figure out how breadboard wiring works.
 
 
 # Starter Milestone
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/_HzAo9UWYic?si=_cvSKKm2nqlFV-xG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+For my starter milestone, I chose to do the Weevil Eye, which is an little device that will glow in the dark. One challenge I faced while making this project is that I didn't know where to solder the different components and I needed help from the staff, after the staff told me where to solder the different components the project was pretty easy.
 
 # Schematics 
 ![Schmatics Image](3580501601455523624.jpg)
