@@ -50,6 +50,8 @@ For your first milestone, describe what your project is and how you plan to buil
 - Technical progress you've made so far
 - Challenges you're facing and solving in your future milestones
 - What your plan is to complete your project
+For this milestone, I assembled the automatic cat laser system by finishing the placement and wiring of all main components. This included securely mounting the microcontroller, attaching both servo motors, and installing the laser module onto the moving servo platform. After assembling the parts, I wired the components to the microcontroller, power, and ground. One challenge I faced was wiring, because when I first began the project, I had little to no knowledge of how to use a breadboard. As a result, I had to ask the BlueStamp staff for help, and I was able to figure out how breadboard wiring works.
+
 
 # Starter Milestone
 
