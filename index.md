@@ -60,6 +60,145 @@ For your first milestone, describe what your project is and how you plan to buil
 
 # Code
 ```c++
+#include <WiFi.h>
+#include <WebServer.h>
+#include <Servo.h>
+
+const char* ssid = "LaserBot";
+const char* password = "12345678";
+
+WebServer server(80);
+
+Servo servo6;  // up/down
+Servo servo9;  // left/right
+
+int angle6 = 90;
+int angle9 = 90;
+
+bool up = false;
+bool down = false;
+bool left = false;
+bool right = false;
+
+void setup() {
+  Serial.begin(115200);
+
+  servo6.attach(6);
+  servo9.attach(9);
+
+  servo6.write(angle6);
+  servo9.write(angle9);
+
+  pinMode(3, OUTPUT);
+  digitalWrite(3, HIGH);
+
+  WiFi.softAP(ssid, password);
+  Serial.println(WiFi.softAPIP());
+
+  server.on("/", []() {
+    server.send(200, "text/html", R"rawliteral(
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Laser Control</title>
+</head>
+<body>
+<h2>Hold WASD or Arrow Keys</h2>
+
+<script>
+document.addEventListener('keydown', (e) => {
+  if (e.repeat) return;
+
+  switch (e.key) {
+
+    // INVERTED WASD + ARROWS
+    case 'w':
+    case 'ArrowUp':
+      fetch('/down/on');
+      break;
+
+    case 's':
+    case 'ArrowDown':
+      fetch('/up/on');
+      break;
+
+    case 'a':
+    case 'ArrowLeft':
+      fetch('/right/on');
+      break;
+
+    case 'd':
+    case 'ArrowRight':
+      fetch('/left/on');
+      break;
+  }
+});
+
+document.addEventListener('keyup', (e) => {
+  switch (e.key) {
+
+    case 'w':
+    case 'ArrowUp':
+      fetch('/down/off');
+      break;
+
+    case 's':
+    case 'ArrowDown':
+      fetch('/up/off');
+      break;
+
+    case 'a':
+    case 'ArrowLeft':
+      fetch('/right/off');
+      break;
+
+    case 'd':
+    case 'ArrowRight':
+      fetch('/left/off');
+      break;
+  }
+});
+</script>
+
+</body>
+</html>
+)rawliteral");
+  });
+
+  // ON/OFF routes
+  server.on("/up/on", [](){ up = true; server.send(200, "text/plain", "ok"); });
+  server.on("/up/off", [](){ up = false; server.send(200, "text/plain", "ok"); });
+
+  server.on("/down/on", [](){ down = true; server.send(200, "text/plain", "ok"); });
+  server.on("/down/off", [](){ down = false; server.send(200, "text/plain", "ok"); });
+
+  server.on("/left/on", [](){ left = true; server.send(200, "text/plain", "ok"); });
+  server.on("/left/off", [](){ left = false; server.send(200, "text/plain", "ok"); });
+
+  server.on("/right/on", [](){ right = true; server.send(200, "text/plain", "ok"); });
+  server.on("/right/off", [](){ right = false; server.send(200, "text/plain", "ok"); });
+
+  server.begin();
+}
+
+void loop() {
+  server.handleClient();
+
+  const int stepSize = 1;
+
+  if (up) angle6 -= stepSize;
+  if (down) angle6 += stepSize;
+  if (left) angle9 -= stepSize;
+  if (right) angle9 += stepSize;
+
+  angle6 = constrain(angle6, 0, 180);
+  angle9 = constrain(angle9, 0, 180);
+
+  servo6.write(angle6);
+  servo9.write(angle9);
+
+  delay(10);
+}
 
 ```
 
