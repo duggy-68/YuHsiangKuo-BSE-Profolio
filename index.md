@@ -88,75 +88,211 @@ void setup() {
 
   server.on("/", []() {
     server.send(200, "text/html", R"rawliteral(
+
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Laser Control</title>
+  <title>Laser Controller</title>
+
+  <style>
+    body {
+      background: #111;
+      color: white;
+      font-family: Arial;
+      text-align: center;
+      user-select: none;
+    }
+
+    h2 {
+      margin-top: 20px;
+    }
+
+    .pad {
+      display: grid;
+      grid-template-columns: 100px 100px 100px;
+      grid-template-rows: 100px 100px 100px;
+      justify-content: center;
+      margin-top: 40px;
+      gap: 10px;
+    }
+
+    button {
+      width: 90px;
+      height: 90px;
+      font-size: 16px;
+      border-radius: 12px;
+      border: 2px solid #333;
+      background: #222;
+      color: white;
+      transition: 0.1s;
+    }
+
+    
+
+    #status {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #00ff99;
+    }
+  </style>
 </head>
+
 <body>
-<h2>Hold WASD or Arrow Keys</h2>
+
+<h2>Laser Control Panel</h2>
+<div id="status">Idle</div>
+
+<div class="pad">
+
+  <div></div>
+
+  <button id="upBtn"
+    onmousedown="upOn()" onmouseup="upOff()"
+    ontouchstart="upOn()" ontouchend="upOff()">
+    UP
+  </button>
+
+  <div></div>
+
+  <button id="leftBtn"
+    onmousedown="leftOn()" onmouseup="leftOff()"
+    ontouchstart="leftOn()" ontouchend="leftOff()">
+    LEFT
+  </button>
+
+  <div></div>
+
+  <button id="rightBtn"
+    onmousedown="rightOn()" onmouseup="rightOff()"
+    ontouchstart="rightOn()" ontouchend="rightOff()">
+    RIGHT
+  </button>
+
+  <div></div>
+
+  <button id="downBtn"
+    onmousedown="downOn()" onmouseup="downOff()"
+    ontouchstart="downOn()" ontouchend="downOff()">
+    DOWN
+  </button>
+
+  <div></div>
+
+</div>
 
 <script>
+
+let status = document.getElementById("status");
+
+function press(btn, text) {
+  document.getElementById(btn).classList.add("active");
+  status.innerText = text;
+}
+
+function release(btn) {
+  document.getElementById(btn).classList.remove("active");
+  status.innerText = "Idle";
+}
+
+/* ===== BUTTON CONTROL ===== */
+
+function upOn() {
+  fetch('/up/on');
+  press("upBtn", "Moving UP");
+}
+function upOff() {
+  fetch('/up/off');
+  release("upBtn");
+}
+
+function downOn() {
+  fetch('/down/on');
+  press("downBtn", "Moving DOWN");
+}
+function downOff() {
+  fetch('/down/off');
+  release("downBtn");
+}
+
+function leftOn() {
+  fetch('/left/on');
+  press("leftBtn", "Moving LEFT");
+}
+function leftOff() {
+  fetch('/left/off');
+  release("leftBtn");
+}
+
+function rightOn() {
+  fetch('/right/on');
+  press("rightBtn", "Moving RIGHT");
+}
+function rightOff() {
+  fetch('/right/off');
+  release("rightBtn");
+}
+
+/* ===== KEYBOARD ===== */
+
 document.addEventListener('keydown', (e) => {
   if (e.repeat) return;
 
   switch (e.key) {
-
-    // INVERTED WASD + ARROWS
     case 'w':
     case 'ArrowUp':
-      fetch('/down/on');
+      upOn();
       break;
 
     case 's':
     case 'ArrowDown':
-      fetch('/up/on');
+      downOn();
       break;
 
     case 'a':
     case 'ArrowLeft':
-      fetch('/right/on');
+      leftOn();
       break;
 
     case 'd':
     case 'ArrowRight':
-      fetch('/left/on');
+      rightOn();
       break;
   }
 });
 
 document.addEventListener('keyup', (e) => {
   switch (e.key) {
-
     case 'w':
     case 'ArrowUp':
-      fetch('/down/off');
+      upOff();
       break;
 
     case 's':
     case 'ArrowDown':
-      fetch('/up/off');
+      downOff();
       break;
 
     case 'a':
     case 'ArrowLeft':
-      fetch('/right/off');
+      leftOff();
       break;
 
     case 'd':
     case 'ArrowRight':
-      fetch('/left/off');
+      rightOff();
       break;
   }
 });
+
 </script>
 
 </body>
 </html>
+
 )rawliteral");
   });
 
-  // ON/OFF routes
+  // ROUTES
   server.on("/up/on", [](){ up = true; server.send(200, "text/plain", "ok"); });
   server.on("/up/off", [](){ up = false; server.send(200, "text/plain", "ok"); });
 
@@ -177,10 +313,10 @@ void loop() {
 
   const int stepSize = 1;
 
-  if (up) angle6 -= stepSize;
-  if (down) angle6 += stepSize;
-  if (left) angle9 -= stepSize;
-  if (right) angle9 += stepSize;
+  if (up) angle6 += stepSize;
+  if (down) angle6 -= stepSize;
+  if (left) angle9 += stepSize;
+  if (right) angle9 -= stepSize;
 
   angle6 = constrain(angle6, 0, 180);
   angle9 = constrain(angle9, 0, 180);
