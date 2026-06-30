@@ -60,8 +60,8 @@ const char* password = "12345678";
 
 WebServer server(80);
 
-Servo servo6;  // up/down
-Servo servo9;  // left/right
+Servo servo6;  // up/down (Y)
+Servo servo9;  // left/right (X)
 
 int angle6 = 90;
 int angle9 = 90;
@@ -70,6 +70,23 @@ bool up = false;
 bool down = false;
 bool left = false;
 bool right = false;
+
+bool absoluteMode = false; // optional safety switch
+bool laserOn = true;
+
+// =====================
+// ABSOLUTE XY CONTROL
+// =====================
+void setXY(int y, int x) {
+  absoluteMode = true;
+
+  // Convert -90..90 → 0..180 servo range
+  angle6 = constrain(90 + y, 0, 180);
+  angle9 = constrain(90 + x, 0, 180);
+
+  servo6.write(angle6);
+  servo9.write(angle9);
+}
 
 void setup() {
   Serial.begin(115200);
@@ -86,27 +103,24 @@ void setup() {
   WiFi.softAP(ssid, password);
   Serial.println(WiFi.softAPIP());
 
+  // =====================
+  // MAIN PAGE
+  // =====================
   server.on("/", []() {
     server.send(200, "text/html", R"rawliteral(
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>Laser Controller</title>
-
   <style>
     body {
       background: #111;
       color: white;
-      font-family: Arial;
+      font-family: Arial, sans-serif;
       text-align: center;
       user-select: none;
     }
-
-    h2 {
-      margin-top: 20px;
-    }
-
+    h2 { margin-top: 20px; }
     .pad {
       display: grid;
       grid-template-columns: 100px 100px 100px;
@@ -115,7 +129,6 @@ void setup() {
       margin-top: 40px;
       gap: 10px;
     }
-
     button {
       width: 90px;
       height: 90px;
@@ -126,32 +139,40 @@ void setup() {
       color: white;
       transition: 0.1s;
     }
-
-    
-
+    button:active {
+      background: #333;
+    }
     #status {
       margin-top: 20px;
       font-size: 18px;
       color: #00ff99;
     }
+    #laserBtn {
+      width: 120px;
+      height: 45px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      font-size: 16px;
+      background: #aa0000;
+    }
   </style>
 </head>
-
 <body>
 
 <h2>Laser Control Panel</h2>
 <div id="status">Idle</div>
 
+<button id="laserBtn" onclick="toggleLaser()">
+  LASER
+</button>
+
 <div class="pad">
-
   <div></div>
-
   <button id="upBtn"
     onmousedown="upOn()" onmouseup="upOff()"
     ontouchstart="upOn()" ontouchend="upOff()">
     UP
   </button>
-
   <div></div>
 
   <button id="leftBtn"
@@ -159,9 +180,7 @@ void setup() {
     ontouchstart="leftOn()" ontouchend="leftOff()">
     LEFT
   </button>
-
   <div></div>
-
   <button id="rightBtn"
     onmousedown="rightOn()" onmouseup="rightOff()"
     ontouchstart="rightOn()" ontouchend="rightOff()">
@@ -169,164 +188,143 @@ void setup() {
   </button>
 
   <div></div>
-
   <button id="downBtn"
     onmousedown="downOn()" onmouseup="downOff()"
     ontouchstart="downOn()" ontouchend="downOff()">
     DOWN
   </button>
-
   <div></div>
-
 </div>
 
 <script>
+let statusDiv = document.getElementById("status");
+let laserBtn = document.getElementById("laserBtn");
 
-let status = document.getElementById("status");
-
-function press(btn, text) {
-  document.getElementById(btn).classList.add("active");
-  status.innerText = text;
+function press(text) {
+  statusDiv.innerText = text;
 }
 
-function release(btn) {
-  document.getElementById(btn).classList.remove("active");
-  status.innerText = "Idle";
+function release() {
+  statusDiv.innerText = "Idle";
 }
 
 /* ===== BUTTON CONTROL ===== */
+function upOn() { fetch('/up/on'); press("Moving Up"); }
+function upOff() { fetch('/up/off'); release(); }
 
-function upOn() {
-  fetch('/up/on');
-  press("upBtn", "Moving UP");
-}
-function upOff() {
-  fetch('/up/off');
-  release("upBtn");
-}
+function downOn() { fetch('/down/on'); press("Moving Down"); }
+function downOff() { fetch('/down/off'); release(); }
 
-function downOn() {
-  fetch('/down/on');
-  press("downBtn", "Moving DOWN");
-}
-function downOff() {
-  fetch('/down/off');
-  release("downBtn");
-}
+function leftOn() { fetch('/left/on'); press("Moving Left"); }
+function leftOff() { fetch('/left/off'); release(); }
 
-function leftOn() {
-  fetch('/left/on');
-  press("leftBtn", "Moving LEFT");
-}
-function leftOff() {
-  fetch('/left/off');
-  release("leftBtn");
-}
+function rightOn() { fetch('/right/on'); press("Moving Right"); }
+function rightOff() { fetch('/right/off'); release(); }
 
-function rightOn() {
-  fetch('/right/on');
-  press("rightBtn", "Moving RIGHT");
-}
-function rightOff() {
-  fetch('/right/off');
-  release("rightBtn");
+function toggleLaser() { 
+  fetch('/laser/toggle')
+    .then(response => response.text())
+    .then(state => {
+      laserBtn.style.background = (state === "on") ? "#aa0000" : "#222";
+    });
 }
 
 /* ===== KEYBOARD ===== */
-
 document.addEventListener('keydown', (e) => {
   if (e.repeat) return;
 
-  switch (e.key) {
+  switch (e.key.toLowerCase()) {
     case 'w':
-    case 'ArrowUp':
-      upOn();
-      break;
-
+    case 'arrowup': upOn(); break;
     case 's':
-    case 'ArrowDown':
-      downOn();
-      break;
-
+    case 'arrowdown': downOn(); break;
     case 'a':
-    case 'ArrowLeft':
-      leftOn();
-      break;
-
+    case 'arrowleft': leftOn(); break;
     case 'd':
-    case 'ArrowRight':
-      rightOn();
-      break;
+    case 'arrowright': rightOn(); break;
+    case 'e': toggleLaser(); break; 
   }
 });
 
 document.addEventListener('keyup', (e) => {
-  switch (e.key) {
+  switch (e.key.toLowerCase()) {
     case 'w':
-    case 'ArrowUp':
-      upOff();
-      break;
-
+    case 'arrowup': upOff(); break;
     case 's':
-    case 'ArrowDown':
-      downOff();
-      break;
-
+    case 'arrowdown': downOff(); break;
     case 'a':
-    case 'ArrowLeft':
-      leftOff();
-      break;
-
+    case 'arrowleft': leftOff(); break;
     case 'd':
-    case 'ArrowRight':
-      rightOff();
-      break;
+    case 'arrowright': rightOff(); break;
   }
 });
-
 </script>
 
 </body>
 </html>
-
 )rawliteral");
   });
 
-  // ROUTES
-  server.on("/up/on", [](){ up = true; server.send(200, "text/plain", "ok"); });
+  // =====================
+  // BUTTON ROUTES
+  // =====================
+  server.on("/up/on", [](){ up = true; absoluteMode = false; server.send(200, "text/plain", "ok"); });
   server.on("/up/off", [](){ up = false; server.send(200, "text/plain", "ok"); });
 
-  server.on("/down/on", [](){ down = true; server.send(200, "text/plain", "ok"); });
+  server.on("/down/on", [](){ down = true; absoluteMode = false; server.send(200, "text/plain", "ok"); });
   server.on("/down/off", [](){ down = false; server.send(200, "text/plain", "ok"); });
 
-  server.on("/left/on", [](){ left = true; server.send(200, "text/plain", "ok"); });
+  server.on("/left/on", [](){ left = true; absoluteMode = false; server.send(200, "text/plain", "ok"); });
   server.on("/left/off", [](){ left = false; server.send(200, "text/plain", "ok"); });
 
-  server.on("/right/on", [](){ right = true; server.send(200, "text/plain", "ok"); });
+  server.on("/right/on", [](){ right = true; absoluteMode = false; server.send(200, "text/plain", "ok"); });
   server.on("/right/off", [](){ right = false; server.send(200, "text/plain", "ok"); });
+
+  server.on("/laser/toggle", []() {
+    laserOn = !laserOn;
+    digitalWrite(3, laserOn ? HIGH : LOW);
+    server.send(200, "text/plain", laserOn ? "on" : "off");
+  });
+
+  // =====================
+  // ABSOLUTE CONTROL API
+  // =====================
+  server.on("/set", []() {
+    if (server.hasArg("y") && server.hasArg("x")) {
+      int y = server.arg("y").toInt(); 
+      int x = server.arg("x").toInt(); 
+
+      y = constrain(y, -90, 90);
+      x = constrain(x, -90, 90);
+
+      setXY(y, x);
+      server.send(200, "text/plain", "ok");
+    } else {
+      server.send(400, "text/plain", "missing args");
+    }
+  });
 
   server.begin();
 }
 
 void loop() {
   server.handleClient();
-
   const int stepSize = 1;
 
-  if (up) angle6 += stepSize;
-  if (down) angle6 -= stepSize;
-  if (left) angle9 += stepSize;
-  if (right) angle9 -= stepSize;
+  if (!absoluteMode) {
+    if (up) angle6 += stepSize;
+    if (down) angle6 -= stepSize;
+    if (left) angle9 += stepSize;
+    if (right) angle9 -= stepSize;
 
-  angle6 = constrain(angle6, 0, 180);
-  angle9 = constrain(angle9, 0, 180);
+    angle6 = constrain(angle6, 0, 180);
+    angle9 = constrain(angle9, 0, 180);
 
-  servo6.write(angle6);
-  servo9.write(angle9);
-
+    servo6.write(angle6);
+    servo9.write(angle9);
+  }
   delay(10);
 }
-
 ```
 
 # Bill of Materials
