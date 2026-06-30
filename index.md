@@ -47,7 +47,7 @@ For this milestone, I assembled the automatic cat laser system by finishing the 
 For my starter milestone, I chose to do the Weevil Eye, which is an little device that will glow in the dark. One challenge I faced while making this project is that I didn't know where to solder the different components and I needed help from the staff, after the staff told me where to solder the different components the project was pretty easy.
 
 # Schematics 
-![Schmatics Image](Yellowwiregoestod9.png)
+![Schmatics Image](THE.png)
 
 # Code
 ```c++
