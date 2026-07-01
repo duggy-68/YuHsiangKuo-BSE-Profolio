@@ -30,20 +30,21 @@ For your final milestone, explain the outcome of your project. Key details to in
 # Second Milestone
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/CkGeqMq0fFI?si=y9yLU56fsKTDfR8L" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 For this milestone, I programmed and inputed the code for the automatic cat laser system. I programmed the microcontroller to host its own local Wi-Fi hotspot, allowing any compatible device to connect to its network. Once connected, users can go to a dedicated webpage where they can control the laser's movements in real time using the arrow keys. The most significant challenge during this milestone was developing and debugging the web interface itself. Ensuring smooth communication between the webpage inputs and the hardware took several hours of troubleshooting, but it ultimately provided a highly responsive and reliable control system.
 
 # First Milestone
 
-**Don't forget to replace the text below with the embedding for your milestone video. Go to Youtube, click Share -> Embed, and copy and paste the code to replace what's below.**
-
 <iframe width="560" height="315" src="https://www.youtube.com/embed/ur3kb19ppF0?si=G0V7BEATicOukPQH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-For this milestone, I assembled the automatic cat laser system by finishing the placement and wiring of all main components. This included securely mounting the microcontroller, attaching both servo motors, and installing the laser module onto the moving servo platform. After assembling the parts, I wired the components to the microcontroller, power, and ground. One challenge I faced was wiring, because when I first began the project, I had little to no knowledge of how to use a breadboard. As a result, I had to ask the BlueStamp staff for help, and I was able to figure out how breadboard wiring works.
+For this milestone, I assembled the automatic cat laser system by completing the placement and wiring of all the main hardware components. This included mounting the microcontroller, attaching both servo motors, and installing the laser module onto the moving servo platform so that it could aim in different directions. After assembling the mechanical parts, I  connected each component to the microcontroller using a breadboard, making sure the power, ground, and signal wires were connected correctly. Once everything was wired together, I tested the connections to verify that the servos responded properly and that the laser module functioned as expected. One of the biggest challenges I faced during this milestone was learning how to wire the circuit correctly. When I first started the project, I had little to no experience using a breadboard. Because of this, I keep misplacing the components and wires. To overcome this challenge, I asked the BlueStamp staff for guidance. They explained how the rows and columns of a breadboard are connected and showed me how to organize my wiring to avoid mistakes. After practicing and making several adjustments, I became much more comfortable using a breadboard and was able to wire the entire circuit on my own. This experience not only allowed me to complete the milestone successfully but also gave me a much stronger understanding of basic electronics and circuit assembly, which will be valuable for the remaining stages of the project.
+
 
 
 # Starter Milestone
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/_HzAo9UWYic?si=_cvSKKm2nqlFV-xG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 For my starter milestone, I chose to do the Weevil Eye, which is an little device that will glow in the dark. One challenge I faced while making this project is that I didn't know where to solder the different components and I needed help from the staff, after the staff told me where to solder the different components the project was pretty easy.
 
 # Schematics 
@@ -322,6 +323,7 @@ void loop() {
 
     servo6.write(angle6);
     servo9.write(angle9);
+
   }
   delay(10);
 }
