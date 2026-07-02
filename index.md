@@ -66,7 +66,7 @@ bool down = false;
 bool left = false;
 bool right = false;
 
-bool absoluteMode = false; // optional safety switch
+bool absoluteMode = false; 
 bool laserOn = true;
 
 // =====================
@@ -314,11 +314,11 @@ void loop() {
 
     angle6 = constrain(angle6, 0, 180);
     angle9 = constrain(angle9, 0, 180);
-
-    servo6.write(angle6);
-    servo9.write(angle9);
-
   }
+
+  servo6.write(angle6);
+  servo9.write(angle9);
+
   delay(10);
 }
 ```
@@ -335,3 +335,4 @@ Don't forget to place the link of where to buy each component inside the quotati
 | Breadboard | The Breadboard is used for connecting the different components and powering them through the Arduino | $6.94 | <a href="https://www.circuitspecialists.com/solderless-breadboard-wb-102?srsltid=AfmBOoqAdRa26hUczgJqRGVDgQlZRbzPE5B9W7al7v9-UfMLZbwAIrzp"> Link </a> |
 | Male to Male Breadboard Wires | These wires are used to connect the servo motors onto the breadboard and connecting the arduino to the breadboard. | $6.99 | <a href="https://www.amazon.com/ELEGOO-Solderless-Flexible-Breadboard-Compatible/dp/B09ZQP9LB6"> Link </a> |
 | Male to Female Breadboard Wires | These wires are used to connect the laser diode onto the breadboard. | $6.99 | <a href="https://www.amazon.com/Solderless-Multicolored-Electronic-Breadboard-Protoboard/dp/B09FPDNHLL/ref=sr_1_2_sspa?dib=eyJ2IjoiMSJ9.QGbaFF62mgZ1Tf0J7CajkMLozJc0dshFcrmAmcYlRqTXcG5xDgYK6kv910gD3F_hxe5aIKEfvtDkKUE4fJjdmwOiAnwRCkElgrZf4M-QGi-XnXF-X4WMBlrW1xhhagWxdfidBzI0Of6DhoHMRr0JYx7rh0vIeTH0_6Hybvec3ppmboCrUr4V4GjC3oInxoDH2XWnIV9MA6UDjIGBA0f-8qCCcq0sQJFP1mN5YjqRAuo.xfJPVOtLCcKQnacooVHHPLJ_gKTuzJmk32kt6164KiA&dib_tag=se&keywords=male+to+female+jumper+wires&qid=1782748237&sr=8-2-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1"> Link </a> |
+| Toggle Switch (Optional) | Turn off the laser and servo | $8.98 | <a href="https://www.amazon.com/RLECS-10-Pack-Rocker-Switch-Toggle/dp/B07YDBM7W4"> Link </a> |
