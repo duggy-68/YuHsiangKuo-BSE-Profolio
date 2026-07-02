@@ -327,5 +327,5 @@ Don't forget to place the link of where to buy each component inside the quotati
 | Toggle Switch (Optional) | Turn off the laser and servo | $8.98 | <a href="https://www.amazon.com/RLECS-10-Pack-Rocker-Switch-Toggle/dp/B07YDBM7W4"> Link </a> |
 
 # Other Resources
-- <a href="https://hackaday.io/project/175107-arduino-cat-laser-toy-diy"> Original Project </a>
+- <a href="https://hackaday.io/project/175107-arduino-cat-laser-toy-diy"> Automatic Cat Laser Schematics </a>
 - <a href="https://randomnerdtutorials.com/esp32-web-server-arduino-ide/"> Web Server Tutorial </a>
