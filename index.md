@@ -33,6 +33,9 @@ For my starter milestone, I chose to do the Weevil Eye, which is an little devic
 # Schematics 
 ![Schmatics Image]((1).png)
 
+# 3D Design
+
+
 # Code
 ```c++
 #include <WiFi.h>
