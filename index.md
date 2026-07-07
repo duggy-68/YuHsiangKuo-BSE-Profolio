@@ -34,7 +34,10 @@ For my starter milestone, I chose to do the Weevil Eye, which is an little devic
 ![Schmatics Image]((1).png)
 
 # 3D Design
-
+![Board Image](boardPic.png)
+<a href="topBoard.f3d" download>Download File</a>
+![Box Image](boxPic.png)
+<a href="box.f3d" download>Download File</a>
 
 # Code
 ```c++
