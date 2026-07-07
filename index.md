@@ -38,6 +38,7 @@ For my starter milestone, I chose to do the Weevil Eye, which is an little devic
 <a href="topBoard.f3d" download>Top Board Design</a>
 
 ![Box Image](boxPic.png)
+
 <a href="box.f3d" download>Box Design</a>
 
 # Code
