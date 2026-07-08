@@ -5,7 +5,7 @@ The Automatic Cat Laser is an embedded systems project that combines electronics
 | Yu Hsiang K. | Piedmont Hills High School | Electrical Engineering | Incoming Junior
 
 
-![Headstone Image](thei.png.png)
+![Headstone Image](headstoneImage.png)
 
 
 
@@ -31,12 +31,16 @@ For this milestone, I assembled the automatic cat laser system by completing the
 For my starter milestone, I chose to do the Weevil Eye, which is an little device that will glow in the dark. One challenge I faced while making this project is that I didn't know where to solder the different components and I needed help from the staff, after the staff told me where to solder the different components the project was pretty easy.
 
 # Schematics 
-![Schmatics Image]((1).png)
+![Schmatics Image](schematicsImage.png)
 
 # 3D Design
-![Board Image](boardPic.png)
+![Board Image](topBoard.png)
 
 <a href="topBoard.f3d" download>Top Board Design</a>
+
+![Mount Image](boxPic.png)
+
+<a href="mount.f3d" download>Mount Design</a>
 
 ![Box Image](boxPic.png)
 
