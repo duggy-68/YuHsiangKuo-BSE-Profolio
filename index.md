@@ -7,7 +7,9 @@ The Automatic Cat Laser is an embedded systems project that combines electronics
 
 ![Headstone Image](headstone.png)
 
+# Final Milestone
 
+For this milestone, I installed an on/off switch for the automatic cat laser. I also designed and 3D printed a box to house all of the wiring and the power source, as well as a mounting component for the cat laser. This makes the automatic cat laser much easier to transport because I no longer have to carry the breadboard with all of the exposed wiring, which I would sometimes accidentally disconnect. The enclosure also provides a dedicated opening for the on/off switch, holding it securely in place. One issue I ran into was that I accidentally made the hole for the wire connecting the power source to the cat laser too small when designing the box. As a result, the power bank has to sit at an angle so the wire can reach and connect to the laser.
 
 
 # Second Milestone
