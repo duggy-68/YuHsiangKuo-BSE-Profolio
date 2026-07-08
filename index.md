@@ -39,11 +39,14 @@ For my starter milestone, I chose to do the Weevil Eye, which is an little devic
 # 3D Design
 ![Board Image](topBoard.png)
 
+For my top board, I originally designed it to be attached with screws, but this was impractical because recharging the portable charger used as the power source required me to remove four screws, take out the charger, recharge it, put it back in, and then reinstall all the screws. To solve this issue, I redesigned the top board with a snap-fit design, where protruding tabs fit into matching holes to hold the board in place. This design is much more convenient and allows for easier access to the power source compared to the original screwed-on top board.
 <a href="topBoard.f3d" download>Top Board Design</a>
 
 ![Mount Image](mount.png)
 
+Originally, I did not design a mount because I thought I could simply place the laser inside the box. However, without gluing the servo to the box, the servo itself would rotate instead of the laser. To solve this issue, I designed a mount that securely holds the servo in place, allowing it to rotate the laser properly without requiring glue.
 <a href="mount.f3d" download>Mount Design</a>
+
 
 ![Box Image](boxPic.png)
 
