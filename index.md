@@ -52,6 +52,8 @@ Originally, I did not design a mount because I thought I could simply place the 
 
 ![Box Image](boxPic.png)
 
+For the box, I designed a compartment to hold the portable charger that acts as the power source, with an opening for the charging cable to pass through. There is also a hole on the side for the on/off switch to be installed, while the hole on the front is designed to attach the laser mount.
+
 <a href="box.f3d" download>Box Design</a>
 
 # Code
