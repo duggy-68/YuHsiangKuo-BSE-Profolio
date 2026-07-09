@@ -10,20 +10,33 @@ The Automatic Cat Laser is an embedded systems project that combines electronics
 # Final Milestone
 <iframe width="560" height="315" src="https://www.youtube.com/embed/LmWYyMpZ1is?si=YCYgS2xh2EaaJglM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-**What I did**
+**What I did:** For this milestone, I installed an on/off switch for the automatic cat laser. I also designed and 3D printed a box to house all of the wiring and the power source, as well as a mounting component for the cat laser. This makes the automatic cat laser much easier to transport because I no longer have to carry the breadboard with all of the exposed wiring, which I would sometimes accidentally disconnect. The enclosure also provides a dedicated opening for the on/off switch, holding it securely in place.
+
+**Challenges:** One issue I ran into was that I accidentally made the hole for the wire connecting the power source to the cat laser too small when designing the box. As a result, the power bank has to sit at an angle so the wire can reach and connect to the laser.
+
+**What I learned:** I learned how to do CAD design from doing this milestone.
+
 
 
 # Second Milestone
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/CkGeqMq0fFI?si=y9yLU56fsKTDfR8L" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-For this milestone, I programmed and inputed the code for the automatic cat laser system. I programmed the microcontroller to host its own local Wi-Fi hotspot, allowing any compatible device to connect to its network. Once connected, users can go to a dedicated webpage where they can control the laser's movements in real time using the arrow keys. The most significant challenge during this milestone was developing and debugging the web interface itself. Ensuring smooth communication between the webpage inputs and the hardware took several hours of troubleshooting, but it ultimately provided a highly responsive and reliable control system.
+**What I did:** For this milestone, I programmed and inputed the code for the automatic cat laser system. I programmed the microcontroller to host its own local Wi-Fi hotspot, allowing any compatible device to connect to its network. Once connected, users can go to a dedicated webpage where they can control the laser's movements in real time using the arrow keys. 
+
+**Challeneges:** The most significant challenge during this milestone was developing and debugging the web interface itself. Ensuring smooth communication between the webpage inputs and the hardware took several hours of troubleshooting, but it ultimately provided a highly responsive and reliable control system.
+
+**What I learned:** I learned how to set up a web server from an arduino.
 
 # First Milestone
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/ur3kb19ppF0?si=G0V7BEATicOukPQH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-For this milestone, I assembled the automatic cat laser system by completing the placement and wiring of all the main hardware components. This included mounting the microcontroller, attaching both servo motors, and installing the laser module onto the moving servo platform so that it could aim in different directions. After assembling the mechanical parts, I  connected each component to the microcontroller using a breadboard, making sure the power, ground, and signal wires were connected correctly. Once everything was wired together, I tested the connections to verify that the servos responded properly and that the laser module functioned as expected. One of the biggest challenges I faced during this milestone was learning how to wire the circuit correctly. When I first started the project, I had little to no experience using a breadboard. Because of this, I keep misplacing the components and wires. To overcome this challenge, I asked the BlueStamp staff for guidance. They explained how the rows and columns of a breadboard are connected and showed me how to organize my wiring to avoid mistakes. After practicing and making several adjustments, I became much more comfortable using a breadboard and was able to wire the entire circuit on my own. This experience not only allowed me to complete the milestone successfully but also gave me a much stronger understanding of basic electronics and circuit assembly, which will be valuable for the remaining stages of the project.
+**What I did:** For this milestone, I assembled the automatic cat laser system by completing the placement and wiring of all the main hardware components. This included mounting the microcontroller, attaching both servo motors, and installing the laser module onto the moving servo platform so that it could aim in different directions. After assembling the mechanical parts, I  connected each component to the microcontroller using a breadboard, making sure the power, ground, and signal wires were connected correctly. Once everything was wired together, I tested the connections to verify that the servos responded properly and that the laser module functioned as expected. 
+
+**Challenges:** One of the biggest challenges I faced during this milestone was learning how to wire the circuit correctly. When I first started the project, I had little to no experience using a breadboard. Because of this, I keep misplacing the components and wires. To overcome this challenge, I asked the BlueStamp staff for guidance. They explained how the rows and columns of a breadboard are connected and showed me how to organize my wiring to avoid mistakes. After practicing and making several adjustments, I became much more comfortable using a breadboard and was able to wire the entire circuit on my own. 
+
+**What I learned:** How to do breadboarding.
 
 
 
