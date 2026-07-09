@@ -58,68 +58,123 @@ For the box, I designed a compartment to hold the portable charger that acts as 
 
 # Code
 ```c++
-#include <WiFi.h>
-#include <WebServer.h>
-#include <Servo.h>
+#include <WiFi.h>          // Allows the ESP32 to create a WiFi network
+#include <WebServer.h>     // Creates a web server for handling browser requests
+#include <Servo.h>         // Controls servo motors
 
+// ==============================
+// WiFi Access Point Information
+// ==============================
+
+// Name of the WiFi network the ESP32 creates
 const char* ssid = "LaserBot";
+
+// Password for connecting to the ESP32 network
 const char* password = "12345678";
 
+// Create a web server on port 80 (default HTTP port)
 WebServer server(80);
 
-Servo servo6;  // up/down (Y)
-Servo servo9;  // left/right (X)
+// ==============================
+// Servo Objects
+// ==============================
 
+// Vertical movement servo
+Servo servo6;
+
+// Horizontal movement servo
+Servo servo9;
+
+// Current angle of each servo
+// Both start centered at 90°
 int angle6 = 90;
 int angle9 = 90;
 
+// ==============================
+// Direction Button States
+// ==============================
+
+// These become true while a movement button is held
 bool up = false;
 bool down = false;
 bool left = false;
 bool right = false;
 
-bool absoluteMode = false; 
+// ==============================
+// Control Mode
+// ==============================
+
+// false = manual button control
+// true = absolute coordinate control
+bool absoluteMode = false;
+
+// Current laser state
 bool laserOn = true;
 
-// =====================
-// ABSOLUTE XY CONTROL
-// =====================
+// =======================================================
+// Moves both servos directly to a specified X,Y position
+// =======================================================
 void setXY(int y, int x) {
+
+  // Switch into absolute positioning mode
   absoluteMode = true;
 
-  // Convert -90..90 → 0..180 servo range
+  // Convert coordinates from
+  // -90 to +90
+  // into servo angles
+  // 0 to 180
+
   angle6 = constrain(90 + y, 0, 180);
   angle9 = constrain(90 + x, 0, 180);
 
+  // Immediately move servos
   servo6.write(angle6);
   servo9.write(angle9);
 }
 
 void setup() {
+
+  // Opens Serial Monitor for debugging
   Serial.begin(115200);
 
+  // Attach servos to ESP32 pins
   servo6.attach(6);
   servo9.attach(9);
 
+  // Move servos to their starting positions
   servo6.write(angle6);
   servo9.write(angle9);
 
+  // Laser output pin
   pinMode(3, OUTPUT);
+
+  // Turn laser on initially
   digitalWrite(3, HIGH);
 
+  // Create WiFi hotspot
   WiFi.softAP(ssid, password);
+
+  // Print IP address to Serial Monitor
   Serial.println(WiFi.softAPIP());
 
-  // =====================
-  // MAIN PAGE
-  // =====================
+  // ===================================================
+  // Main webpage shown when someone visits the ESP32 IP
+  // ===================================================
   server.on("/", []() {
+
     server.send(200, "text/html", R"rawliteral(
+
 <!DOCTYPE html>
 <html>
+
 <head>
+
   <title>Laser Controller</title>
+
   <style>
+
+    /* Overall webpage appearance */
+
     body {
       background: #111;
       color: white;
@@ -127,211 +182,462 @@ void setup() {
       text-align: center;
       user-select: none;
     }
-    h2 { margin-top: 20px; }
+
+    h2 {
+      margin-top: 20px;
+    }
+
+    /* Direction button layout */
+
     .pad {
+
       display: grid;
+
       grid-template-columns: 100px 100px 100px;
       grid-template-rows: 100px 100px 100px;
+
       justify-content: center;
+
       margin-top: 40px;
+
       gap: 10px;
     }
+
+    /* Standard button appearance */
+
     button {
+
       width: 90px;
       height: 90px;
+
       font-size: 16px;
+
       border-radius: 12px;
+
       border: 2px solid #333;
+
       background: #222;
+
       color: white;
+
       transition: 0.1s;
     }
+
+    /* Button color while pressed */
+
     button:active {
       background: #333;
     }
+
+    /* Status text */
+
     #status {
       margin-top: 20px;
       font-size: 18px;
       color: #00ff99;
     }
+
+    /* Laser toggle button */
+
     #laserBtn {
+
       width: 120px;
       height: 45px;
+
       margin-top: 15px;
       margin-bottom: 15px;
+
       font-size: 16px;
+
       background: #aa0000;
     }
+
   </style>
+
 </head>
+
 <body>
 
 <h2>Laser Control Panel</h2>
+
+<!-- Shows current movement -->
 <div id="status">Idle</div>
 
+<!-- Laser toggle button -->
 <button id="laserBtn" onclick="toggleLaser()">
-  LASER
+LASER
 </button>
 
+<!-- Direction button grid -->
 <div class="pad">
-  <div></div>
-  <button id="upBtn"
-    onmousedown="upOn()" onmouseup="upOff()"
-    ontouchstart="upOn()" ontouchend="upOff()">
-    UP
-  </button>
-  <div></div>
 
-  <button id="leftBtn"
-    onmousedown="leftOn()" onmouseup="leftOff()"
-    ontouchstart="leftOn()" ontouchend="leftOff()">
-    LEFT
-  </button>
-  <div></div>
-  <button id="rightBtn"
-    onmousedown="rightOn()" onmouseup="rightOff()"
-    ontouchstart="rightOn()" ontouchend="rightOff()">
-    RIGHT
-  </button>
+<div></div>
 
-  <div></div>
-  <button id="downBtn"
-    onmousedown="downOn()" onmouseup="downOff()"
-    ontouchstart="downOn()" ontouchend="downOff()">
-    DOWN
-  </button>
-  <div></div>
+<button id="upBtn"
+
+onmousedown="upOn()"
+onmouseup="upOff()"
+
+ontouchstart="upOn()"
+ontouchend="upOff()">
+
+UP
+
+</button>
+
+<div></div>
+
+<button id="leftBtn"
+
+onmousedown="leftOn()"
+onmouseup="leftOff()"
+
+ontouchstart="leftOn()"
+ontouchend="leftOff()">
+
+LEFT
+
+</button>
+
+<div></div>
+
+<button id="rightBtn"
+
+onmousedown="rightOn()"
+onmouseup="rightOff()"
+
+ontouchstart="rightOn()"
+ontouchend="rightOff()">
+
+RIGHT
+
+</button>
+
+<div></div>
+
+<button id="downBtn"
+
+onmousedown="downOn()"
+onmouseup="downOff()"
+
+ontouchstart="downOn()"
+ontouchend="downOff()">
+
+DOWN
+
+</button>
+
+<div></div>
+
 </div>
 
 <script>
+
+// References webpage elements
 let statusDiv = document.getElementById("status");
 let laserBtn = document.getElementById("laserBtn");
 
-function press(text) {
-  statusDiv.innerText = text;
+// Shows movement text
+function press(text){
+    statusDiv.innerText = text;
 }
 
-function release() {
-  statusDiv.innerText = "Idle";
+// Returns status to Idle
+function release(){
+    statusDiv.innerText = "Idle";
 }
 
-/* ===== BUTTON CONTROL ===== */
-function upOn() { fetch('/up/on'); press("Moving Up"); }
-function upOff() { fetch('/up/off'); release(); }
+// ==============================
+// Movement Button Functions
+// ==============================
 
-function downOn() { fetch('/down/on'); press("Moving Down"); }
-function downOff() { fetch('/down/off'); release(); }
+// Each sends an HTTP request to the ESP32
 
-function leftOn() { fetch('/left/on'); press("Moving Left"); }
-function leftOff() { fetch('/left/off'); release(); }
-
-function rightOn() { fetch('/right/on'); press("Moving Right"); }
-function rightOff() { fetch('/right/off'); release(); }
-
-function toggleLaser() { 
-  fetch('/laser/toggle')
-    .then(response => response.text())
-    .then(state => {
-      laserBtn.style.background = (state === "on") ? "#aa0000" : "#222";
-    });
+function upOn(){
+    fetch('/up/on');
+    press("Moving Up");
 }
 
-/* ===== KEYBOARD ===== */
-document.addEventListener('keydown', (e) => {
-  if (e.repeat) return;
+function upOff(){
+    fetch('/up/off');
+    release();
+}
 
-  switch (e.key.toLowerCase()) {
-    case 'w':
-    case 'arrowup': upOn(); break;
-    case 's':
-    case 'arrowdown': downOn(); break;
-    case 'a':
-    case 'arrowleft': leftOn(); break;
-    case 'd':
-    case 'arrowright': rightOn(); break;
-    case 'e': toggleLaser(); break; 
-  }
+function downOn(){
+    fetch('/down/on');
+    press("Moving Down");
+}
+
+function downOff(){
+    fetch('/down/off');
+    release();
+}
+
+function leftOn(){
+    fetch('/left/on');
+    press("Moving Left");
+}
+
+function leftOff(){
+    fetch('/left/off');
+    release();
+}
+
+function rightOn(){
+    fetch('/right/on');
+    press("Moving Right");
+}
+
+function rightOff(){
+    fetch('/right/off');
+    release();
+}
+
+// ==============================
+// Laser Toggle
+// ==============================
+
+function toggleLaser(){
+
+fetch('/laser/toggle')
+
+.then(response => response.text())
+
+.then(state => {
+
+laserBtn.style.background =
+(state==="on") ? "#aa0000" : "#222";
+
 });
 
-document.addEventListener('keyup', (e) => {
-  switch (e.key.toLowerCase()) {
-    case 'w':
-    case 'arrowup': upOff(); break;
-    case 's':
-    case 'arrowdown': downOff(); break;
-    case 'a':
-    case 'arrowleft': leftOff(); break;
-    case 'd':
-    case 'arrowright': rightOff(); break;
-  }
+}
+
+// ==============================
+// Keyboard Controls
+// ==============================
+
+// Key pressed
+document.addEventListener('keydown',(e)=>{
+
+// Ignore auto-repeat
+if(e.repeat) return;
+
+switch(e.key.toLowerCase()){
+
+case 'w':
+case 'arrowup':
+upOn();
+break;
+
+case 's':
+case 'arrowdown':
+downOn();
+break;
+
+case 'a':
+case 'arrowleft':
+leftOn();
+break;
+
+case 'd':
+case 'arrowright':
+rightOn();
+break;
+
+case 'e':
+toggleLaser();
+break;
+
+}
+
 });
+
+// Key released
+document.addEventListener('keyup',(e)=>{
+
+switch(e.key.toLowerCase()){
+
+case 'w':
+case 'arrowup':
+upOff();
+break;
+
+case 's':
+case 'arrowdown':
+downOff();
+break;
+
+case 'a':
+case 'arrowleft':
+leftOff();
+break;
+
+case 'd':
+case 'arrowright':
+rightOff();
+break;
+
+}
+
+});
+
 </script>
 
 </body>
+
 </html>
+
 )rawliteral");
+
   });
 
-  // =====================
-  // BUTTON ROUTES
-  // =====================
-  server.on("/up/on", [](){ up = true; absoluteMode = false; server.send(200, "text/plain", "ok"); });
-  server.on("/up/off", [](){ up = false; server.send(200, "text/plain", "ok"); });
+  // ======================================
+  // Movement API Endpoints
+  // ======================================
 
-  server.on("/down/on", [](){ down = true; absoluteMode = false; server.send(200, "text/plain", "ok"); });
-  server.on("/down/off", [](){ down = false; server.send(200, "text/plain", "ok"); });
+  // When browser requests /up/on,
+  // begin moving upward
 
-  server.on("/left/on", [](){ left = true; absoluteMode = false; server.send(200, "text/plain", "ok"); });
-  server.on("/left/off", [](){ left = false; server.send(200, "text/plain", "ok"); });
+  server.on("/up/on", []() {
+    up = true;
+    absoluteMode = false;
+    server.send(200, "text/plain", "ok");
+  });
 
-  server.on("/right/on", [](){ right = true; absoluteMode = false; server.send(200, "text/plain", "ok"); });
-  server.on("/right/off", [](){ right = false; server.send(200, "text/plain", "ok"); });
+  // Stop moving upward
+  server.on("/up/off", []() {
+    up = false;
+    server.send(200, "text/plain", "ok");
+  });
+
+  // Down controls
+  server.on("/down/on", []() {
+    down = true;
+    absoluteMode = false;
+    server.send(200, "text/plain", "ok");
+  });
+
+  server.on("/down/off", []() {
+    down = false;
+    server.send(200, "text/plain", "ok");
+  });
+
+  // Left controls
+  server.on("/left/on", []() {
+    left = true;
+    absoluteMode = false;
+    server.send(200, "text/plain", "ok");
+  });
+
+  server.on("/left/off", []() {
+    left = false;
+    server.send(200, "text/plain", "ok");
+  });
+
+  // Right controls
+  server.on("/right/on", []() {
+    right = true;
+    absoluteMode = false;
+    server.send(200, "text/plain", "ok");
+  });
+
+  server.on("/right/off", []() {
+    right = false;
+    server.send(200, "text/plain", "ok");
+  });
+
+  // ======================================
+  // Laser Toggle Endpoint
+  // ======================================
 
   server.on("/laser/toggle", []() {
+
+    // Reverse current laser state
     laserOn = !laserOn;
+
+    // Turn laser on or off
     digitalWrite(3, laserOn ? HIGH : LOW);
+
+    // Return current state
     server.send(200, "text/plain", laserOn ? "on" : "off");
+
   });
 
-  // =====================
-  // ABSOLUTE CONTROL API
-  // =====================
+  // ======================================
+  // Absolute Coordinate Endpoint
+  // ======================================
+
   server.on("/set", []() {
-    if (server.hasArg("y") && server.hasArg("x")) {
-      int y = server.arg("y").toInt(); 
-      int x = server.arg("x").toInt(); 
 
-      y = constrain(y, -90, 90);
-      x = constrain(x, -90, 90);
+    // Check if both coordinates were provided
+    if(server.hasArg("y") && server.hasArg("x")){
 
-      setXY(y, x);
-      server.send(200, "text/plain", "ok");
-    } else {
-      server.send(400, "text/plain", "missing args");
+      int y = server.arg("y").toInt();
+      int x = server.arg("x").toInt();
+
+      // Limit values
+      y = constrain(y,-90,90);
+      x = constrain(x,-90,90);
+
+      // Move servos
+      setXY(y,x);
+
+      server.send(200,"text/plain","ok");
+
     }
+
+    else{
+
+      server.send(400,"text/plain","missing args");
+
+    }
+
   });
 
+  // Start web server
   server.begin();
 }
 
+// ======================================
+// Main Program Loop
+// ======================================
+
 void loop() {
+
+  // Check if browser has made requests
   server.handleClient();
+
+  // Servo movement speed
   const int stepSize = 1;
 
-  if (!absoluteMode) {
-    if (up) angle6 += stepSize;
-    if (down) angle6 -= stepSize;
-    if (left) angle9 += stepSize;
-    if (right) angle9 -= stepSize;
+  // Only use manual movement if not in absolute mode
+  if(!absoluteMode){
 
-    angle6 = constrain(angle6, 0, 180);
-    angle9 = constrain(angle9, 0, 180);
+    if(up)
+      angle6 -= stepSize;
+
+    if(down)
+      angle6 += stepSize;
+
+    if(left)
+      angle9 += stepSize;
+
+    if(right)
+      angle9 -= stepSize;
+
+    // Prevent servo moving beyond limits
+    angle6 = constrain(angle6,0,180);
+    angle9 = constrain(angle9,0,180);
+
   }
 
+  // Send updated positions to servos
   servo6.write(angle6);
   servo9.write(angle9);
 
+  // Controls movement speed
   delay(10);
+
 }
 ```
 
