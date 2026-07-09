@@ -5,7 +5,7 @@ The Automatic Cat Laser is an embedded systems project that combines electronics
 | Yu Hsiang K. | Piedmont Hills High School | Electrical Engineering | Incoming Junior
 
 
-![Headstone Image](headstone.png)
+![Headstone Image](headshot+Project.png)
 
 # Final Milestone
 <iframe width="560" height="315" src="https://www.youtube.com/embed/LmWYyMpZ1is?si=YCYgS2xh2EaaJglM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
